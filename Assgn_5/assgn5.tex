@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.65in, paperwidth=8.5in, paperheight=11in]{geometry}
+\usepackage{amsfonts}
+\usepackage{pgfplotstable}
+\usepackage{amsmath}
+\usepackage{amsbsy}
+\usepackage{authblk}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{array}
+\usepackage{titlesec}
+\newcommand{\bs}[1]{\boldsymbol{#1}}
+\newcommand{\del}[2]{\frac{\partial {#1}}{\partial {#2}}}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{mathtools}
+\usepackage{titlesec}
+\titlespacing\section{10pt}{14pt plus 4pt minus 2pt}{10pt plus 2pt minus 2pt}
+\titlespacing\subsection{0pt}{12pt plus 4pt minus 2pt}{8pt plus 2pt minus 2pt}
+\titlespacing\subsubsection{0pt}{12pt plus 4pt minus 2pt}{6pt plus 2pt minus 2pt}
+\usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{arrows.meta,arrows}
+\tikzstyle{startstop}=[rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw-black, fill=red!30]
+\tikzstyle{io}=[trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw-black, fill=red!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
+\tikzstyle{arrow}=[thick, -> ,>=stealth]
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{arrows.meta,arrows}
+\title{\bf Solution Procedures: CEE 570, Assignment 6}
+\author{Bhavesh Shrimali, UIN: 652197102}
+\begin{document}
+\section{Newton-Raphson Method}
+\setlength\parindent{0pt}
+\begin{itemize}
+\item Begin a general step (n). At this stage we have $||{\bf R_{step}}^i||$
+\item Set the iteration counter to an initial value of zero (i=0)
+\item Using the previously calculated residual, we ascertain $\Delta {bf d}^i$ using the expression: $${\bf K}({\bf \Delta d}^i)=\bf R^i$$. It is to be noted that for the first iteration of a particular step, the residual value at the end of the previous step is used to calculate the consistent tangent.
+\item Update ${\bf d^i}$ as: $$\bf d^{i+1}=d^{i}+\Delta d^i$$
+\item Calculation of Strains, in both the portions of the bar, naturally follows the computation of $\bf d^i$
+\item A check is performed, to ascertain whether either of the portions are in the elastic regime or plastic regime, and accordingly determine updated $\bf K_a$ and/or $\bf K_b$ and $\bf K=K_a+K_b$
+\item Calculate $||{\bf R_{step}}^i||$ and the check for the convergence criteria. If satisfied move to the next step. If not, the iterate further in the same step.\\ 
+\end{itemize}
+\section{Modified Newton Method}
+The first line of difference between the Newton-Raphson method and the Modified-Newton Method is that the {\bf K} remains constant throughout the step for the former.\\The procedure for the latter is summarized as follows:
+\begin{itemize}
+\item Entering a particular step (n).  At this stage we have $||{\bf R_{step}}^i||$
+\item Set the iteration counter to an initial value of zero (i=0)
+\item Using the previously calculated residual, we ascertain $\Delta {\bf d}^i$ using the expression: $${\bf K}({\bf \Delta d}^i)=\bf R^i$$. It is to be noted that for the first iteration of a particular step, the residual value at the end of the previous step is used to calculate the consistent tangent.
+\item This $\bf K$ value remains constant throughout the step.
+\item This is followed by strain, and consequently force, calculations. It is ascertained first whether each of the portions of the bar are in elastic/plastic regions. 
+\item Calculation of the Residual: $\bf R^{i+1}=F_{ext}-\Sigma\ {F_{int}}^{i+1}$ 
+\item Check for the Residual: $\bf ||R^{i+1}|| \lessgtr \varepsilon||R^{0}||$
+\item If the residual step is not satisfied  the update: ${\bf d^i}$ as: $$\bf d^{i+1}=d^{i}+\Delta d^i$$ else move to the next step.
+\end{itemize}
+\section{Comparison between the Newton-Raphson and Modified Newton}
+The following section reiterates the comparison between Newton-Raphson and Modified Newton-Method, as observed through the Q-3 in the Assignment. 
+\begin{itemize}
+\item The problem begins in the Step 2. This is a nonlinear step and hence, unlike Step 1, which is linear, the value of residual obtained at the end of the Step 2, and further, is nonzero for Modified Newton with $\varepsilon=10^{-12}$. 
+\item Whereas in case of the Newton-Raphson Method the solution converges exactly after 2 steps and the value of Residual obtained at the end of the second step is exactly equal to zero. The value of displacement obtained in this case is $d=1.9803922x10^{-2}$
+\item This can be attributed to the fact that the force-displacement curve is bi-linear and hence the value of updated tangent is exactly equal to the tangent-2 in the force-displacement curve. 
+\item Contrary to what is observed above, the Modified-Newton Method takes 68 iterations to converge to a value less than the tolerance desired, and still is not exactly equal to zero. 
+\item This can be attributed to the fact that the value of initial tangent can never be equal to the tangent-2, effectively saying $\bf E \neq E_T$
+\item It can be concluded that the Newton-Raphson Method, gives much faster convergence. For more complicated and strongly nonlinear problems, the Modified-Newton Method would eventually prove to be computationally efficient, because it would save time for updating the stiffness matrix.
+\end{itemize} 
+\end{document}
